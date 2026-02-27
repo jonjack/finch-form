@@ -1,3 +1,6 @@
+
+![](src/finch-forms/assets/icon-256x256.png)
+
 # Finch Form
 
 A secure WordPress contact form plugin with **Cloudflare Turnstile**, **rate limiting**, **CSRF protection**, and **Zoho Mail** integration. Submissions are sent via AJAX (no full page refresh) and can be edited in **WPBakery** (Visual Composer).
