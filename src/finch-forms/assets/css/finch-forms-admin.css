@@ -1,0 +1,61 @@
+/* Finch Form – admin settings styles */
+
+.finch-forms-subjects-wrapper {
+	max-width: 640px;
+}
+
+.finch-forms-subjects-input-row {
+	display: flex;
+	gap: 0.5em;
+	align-items: center;
+	margin-bottom: 0.5em;
+}
+
+.finch-forms-subjects-input-row .finch-forms-subject-input {
+	flex: 1 1 auto;
+}
+
+.finch-forms-subject-error {
+	color: #b32d2e;
+	margin: 0.25em 0 0.5em;
+}
+
+.finch-forms-subject-list {
+	list-style: none;
+	margin: 0.5em 0 0;
+	padding: 0;
+}
+
+.finch-forms-subject-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 4px 0;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.finch-forms-subject-item:last-child {
+	border-bottom: none;
+}
+
+.finch-forms-subject-text {
+	color: #666;
+	font-style: italic;
+	margin-right: 0.5em;
+}
+
+.finch-forms-subject-remove {
+	color: #b32d2e;
+	text-decoration: none;
+}
+
+.finch-forms-subject-remove:hover,
+.finch-forms-subject-remove:focus {
+	color: #dc3232;
+}
+
+.finch-forms-subjects-full .finch-forms-subject-input,
+.finch-forms-subjects-full .finch-forms-subject-add {
+	opacity: 0.6;
+}
+

@@ -1,0 +1,9 @@
+{
+  "name": "wp-finch-forms",
+  "version": "1.0.1",
+  "private": true,
+  "scripts": {
+    "build": "bash scripts/build.sh",
+    "zip": "npm run build"
+  }
+}
