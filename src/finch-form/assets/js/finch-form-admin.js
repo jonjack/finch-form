@@ -46,9 +46,9 @@
 			}
 
 			var minLen = (finchFormAdmin && finchFormAdmin.subjectMinLength != null) ? finchFormAdmin.subjectMinLength : 10;
-			var maxLen = (finchFormAdmin && finchFormAdmin.subjectMaxLength != null) ? finchFormAdmin.subjectMaxLength : 70;
+			var maxLen = (finchFormAdmin && finchFormAdmin.subjectMaxLength != null) ? finchFormAdmin.subjectMaxLength : 50;
 			if (text.length < minLen || text.length > maxLen) {
-				setError(finchFormAdmin && finchFormAdmin.subjectLengthError ? finchFormAdmin.subjectLengthError : 'Each subject must be between 10 and 70 characters.');
+				setError(finchFormAdmin && finchFormAdmin.subjectLengthError ? finchFormAdmin.subjectLengthError : 'Each subject must be between 10 and 50 characters.');
 				return;
 			}
 

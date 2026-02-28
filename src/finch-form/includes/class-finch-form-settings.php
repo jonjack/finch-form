@@ -185,13 +185,13 @@ class Finch_Form_Settings {
 			$out['rate_limit_per_min'] = max( 1, min( 30, $n ) );
 		}
 
-		// Subject dropdown items: up to 10 items, 10–70 characters each (same as form subject field).
+		// Subject dropdown items: up to 10 items, 10–50 characters each (same as form subject field).
 		if ( isset( $input['subjects'] ) && is_array( $input['subjects'] ) ) {
 			$subjects = array();
 			foreach ( $input['subjects'] as $subject ) {
 				$subject = trim( wp_strip_all_tags( (string) $subject ) );
 				$len     = strlen( $subject );
-				if ( $len >= 10 && $len <= 70 ) {
+				if ( $len >= 10 && $len <= 50 ) {
 					$subjects[] = $subject;
 				}
 				if ( count( $subjects ) >= 10 ) {
@@ -247,7 +247,7 @@ class Finch_Form_Settings {
 	 * Section description for subjects.
 	 */
 	public static function section_subjects_desc() {
-		echo '<p>' . esc_html__( 'Configure up to 10 subject lines (10–70 characters each). When at least one subject is defined, the subject field on the form is shown as a dropdown instead of a free-text input.', 'finch-form' ) . '</p>';
+		echo '<p>' . esc_html__( 'Configure up to 10 subject lines (10–50 characters each). When at least one subject is defined, the subject field on the form is shown as a dropdown instead of a free-text input.', 'finch-form' ) . '</p>';
 	}
 
 	/**
@@ -322,11 +322,11 @@ class Finch_Form_Settings {
 		echo '<p class="description">' . esc_html__( 'Add preset subject lines. When at least one subject is defined, the subject field on the form is shown as a dropdown instead of a free-text input.', 'finch-form' ) . '</p>';
 
 		echo '<div class="finch-form-subjects-input-row">';
-		echo '<input type="text" class="regular-text finch-form-subject-input" maxlength="70" />';
+		echo '<input type="text" class="regular-text finch-form-subject-input" maxlength="50" />';
 		echo ' <button type="button" class="button button-secondary finch-form-subject-add">' . esc_html__( 'Add', 'finch-form' ) . '</button>';
 		echo '</div>';
 
-		echo '<p class="description finch-form-subject-help">' . esc_html__( 'Each subject must be between 10 and 70 characters. Up to 10 subjects can be added.', 'finch-form' ) . '</p>';
+		echo '<p class="description finch-form-subject-help">' . esc_html__( 'Configure up to 10 Subjects between 10 and 50 characters.', 'finch-form' ) . '</p>';
 		echo '<div class="finch-form-subject-error" style="display:none;"></div>';
 
 		echo '<p class="description"><strong>' . esc_html__( 'List of subject lines that will appear on the form:', 'finch-form' ) . '</strong></p>';
@@ -379,8 +379,8 @@ class Finch_Form_Settings {
 			array(
 				'maxSubjects'        => 10,
 				'subjectMinLength'   => 10,
-				'subjectMaxLength'   => 70,
-				'subjectLengthError' => __( 'Each subject must be between 10 and 70 characters.', 'finch-form' ),
+				'subjectMaxLength'   => 50,
+				'subjectLengthError' => __( 'Each subject must be between 10 and 50 characters.', 'finch-form' ),
 			)
 		);
 	}

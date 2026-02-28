@@ -82,7 +82,7 @@ class Finch_Form_Handler {
 			$errors[] = __( 'Please enter a valid email address.', 'finch-form' );
 		}
 		if ( strlen( $email ) < self::EMAIL_MIN || strlen( $email ) > self::EMAIL_MAX ) {
-			$errors[] = __( 'Email must be between 10 and 70 characters.', 'finch-form' );
+			$errors[] = __( 'Email must be between 10 and 50 characters.', 'finch-form' );
 		}
 		if ( strlen( $subject ) > self::SUBJECT_MAX ) {
 			$errors[] = __( 'Subject is too long.', 'finch-form' );
