@@ -1,6 +1,6 @@
 {
-  "name": "wp-finch-forms",
-  "version": "1.0.1",
+  "name": "finch-form",
+  "version": "1.0.5",
   "private": true,
   "scripts": {
     "build": "bash scripts/build.sh",

@@ -2,27 +2,27 @@
 /**
  * Main plugin class for Finch Form.
  *
- * @package Finch_Forms
+ * @package Finch_Form
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class Finch_Forms
+ * Class Finch_Form
  */
-final class Finch_Forms {
+final class Finch_Form {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var Finch_Forms|null
+	 * @var Finch_Form|null
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get the single instance.
 	 *
-	 * @return Finch_Forms
+	 * @return Finch_Form
 	 */
 	public static function init() {
 		if ( null === self::$instance ) {
@@ -43,10 +43,10 @@ final class Finch_Forms {
 	 * Load required files.
 	 */
 	private function load_dependencies() {
-		require_once FINCH_FORMS_PLUGIN_DIR . 'includes/class-finch-forms-settings.php';
-		require_once FINCH_FORMS_PLUGIN_DIR . 'includes/class-finch-forms-turnstile.php';
-		require_once FINCH_FORMS_PLUGIN_DIR . 'includes/class-finch-forms-form-handler.php';
-		require_once FINCH_FORMS_PLUGIN_DIR . 'includes/class-finch-forms-shortcode.php';
+		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-settings.php';
+		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-turnstile.php';
+		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-handler.php';
+		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-shortcode.php';
 	}
 
 	/**
@@ -56,11 +56,11 @@ final class Finch_Forms {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 
 		if ( is_admin() ) {
-			Finch_Forms_Settings::init();
+			Finch_Form_Settings::init();
 		}
 
-		Finch_Forms_Form_Handler::init();
-		Finch_Forms_Shortcode::init();
+		Finch_Form_Handler::init();
+		Finch_Form_Shortcode::init();
 	}
 
 	/**
@@ -68,9 +68,9 @@ final class Finch_Forms {
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain(
-			'finch-forms',
+			'finch-form',
 			false,
-			dirname( FINCH_FORMS_PLUGIN_BASENAME ) . '/languages'
+			dirname( FINCH_FORM_PLUGIN_BASENAME ) . '/languages'
 		);
 	}
 
@@ -79,9 +79,9 @@ final class Finch_Forms {
 	 */
 	public static function activate() {
 		// Set default options if needed.
-		$opts = get_option( 'finch_forms_settings', array() );
+		$opts = get_option( 'finch_form_settings', array() );
 		if ( empty( $opts ) ) {
-			add_option( 'finch_forms_settings', array(
+			add_option( 'finch_form_settings', array(
 				'turnstile_site_key'   => '',
 				'turnstile_secret_key' => '',
 				'recipient_email'      => get_option( 'admin_email' ),

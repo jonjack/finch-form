@@ -1,0 +1,151 @@
+/* Finch Form – contact form styles */
+
+.finch-form-wrapper {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 30px 30px 34px;
+  border-radius: var(--nm--border-radius-container);
+  background: #f7f7f7;
+}
+
+.finch-form-form {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0px;
+  background-color: #f7f7f7;
+  box-sizing: border-box;
+}
+
+.finch-form-form .finch-form-tripwire {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.finch-form-form .finch-form-field {
+  margin-bottom: 1em;
+}
+
+.finch-form-form .finch-form-field .finch-form-select {
+  width: 100%;
+}
+
+.finch-form-form label {
+  display: block;
+  margin-bottom: 0.25em;
+  font-weight: normal;
+  color: #282828;
+}
+
+.finch-form-form .required {
+  color: #b00;
+}
+
+.finch-form-form input[type="text"],
+.finch-form-form input[type="email"],
+.finch-form-form textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5em 0.6em;
+  border: 1px solid #ccc;
+  border-radius: 0;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.finch-form-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.finch-form-form .finch-form-turnstile-wrap {
+  margin: 1em 0;
+}
+
+.finch-form-form .finch-form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1em;
+}
+
+.finch-form-form .finch-form-submit {
+  width: 100%;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  background-color: #282828;
+  color: #ffffff;
+  border-radius: 0;
+  border: none;
+}
+
+.finch-form-form .finch-form-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.finch-form-form .finch-form-submit.finch-form-loading {
+  position: relative;
+}
+
+/* Feedback block – above form, hidden when empty */
+.finch-form-feedback-block {
+  display: none;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 0 1em;
+  text-align: center;
+  font-size: 18px;
+  box-sizing: border-box;
+}
+
+.finch-form-feedback-block.is-visible {
+  display: block;
+}
+
+.finch-form-feedback-block .finch-form-feedback-content {
+  text-align: center;
+}
+
+.finch-form-feedback-block.is-success .finch-form-feedback-content {
+  color: #0a0;
+}
+
+.finch-form-feedback-block.is-error .finch-form-feedback-content,
+.finch-form-feedback-block.is-error .finch-form-feedback-list {
+  color: #f27362;
+}
+
+.finch-form-feedback-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.finch-form-feedback-item {
+  display: block;
+  margin-bottom: 0.35em;
+  text-align: center;
+}
+
+.finch-form-feedback-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Icon before each error line – use your icon font family if needed */
+.finch-form-feedback-item:before {
+  font-family: "nm-font";
+  content: "\e610";
+  display: inline-block;
+  margin-right: 0.35em;
+  vertical-align: middle;
+}

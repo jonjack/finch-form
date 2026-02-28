@@ -2,22 +2,22 @@
 /**
  * Admin settings for Finch Form (Turnstile keys, recipient, rate limit).
  *
- * @package Finch_Forms
+ * @package FINCH_FORM
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class Finch_Forms_Settings
+ * Class Finch_Form_Settings
  */
-class Finch_Forms_Settings {
+class Finch_Form_Settings {
 
 	/**
 	 * Option name.
 	 *
 	 * @var string
 	 */
-	const OPTION_NAME = 'finch_forms_settings';
+	const OPTION_NAME = 'finch_form_settings';
 
 	/**
 	 * Initialize settings.
@@ -26,7 +26,7 @@ class Finch_Forms_Settings {
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu' ) );
 		add_action( 'admin_init', array( __CLASS__, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_admin_assets' ) );
-		add_filter( 'plugin_action_links_' . FINCH_FORMS_PLUGIN_BASENAME, array( __CLASS__, 'settings_link' ) );
+		add_filter( 'plugin_action_links_' . FINCH_FORM_PLUGIN_BASENAME, array( __CLASS__, 'settings_link' ) );
 	}
 
 	/**
@@ -34,10 +34,10 @@ class Finch_Forms_Settings {
 	 */
 	public static function add_menu() {
 		add_menu_page(
-			__( 'Finch Form', 'finch-forms' ),
-			__( 'Finch Form', 'finch-forms' ),
+			__( 'Finch Form', 'finch-form' ),
+			__( 'Finch Form', 'finch-form' ),
 			'manage_options',
-			'finch-forms',
+			'finch-form',
 			array( __CLASS__, 'render_page' ),
 			'dashicons-twitter', // Bird icon (dashicons code f301).
 			56
@@ -49,7 +49,7 @@ class Finch_Forms_Settings {
 	 */
 	public static function register_settings() {
 		register_setting(
-			'finch_forms_options',
+			'finch_form_options',
 			self::OPTION_NAME,
 			array(
 				'type'              => 'array',
@@ -58,101 +58,102 @@ class Finch_Forms_Settings {
 		);
 
 		add_settings_section(
-			'finch_forms_turnstile',
-			__( 'Cloudflare Turnstile', 'finch-forms' ),
+			'finch_form_turnstile',
+			__( 'Cloudflare Turnstile', 'finch-form' ),
 			array( __CLASS__, 'section_turnstile_desc' ),
-			'finch-forms',
-			array( 'before_section' => '<div class="finch-forms-section">' )
+			'finch-form',
+			array( 'before_section' => '<div class="finch-form-section">' )
 		);
 
 		add_settings_field(
 			'turnstile_site_key',
-			__( 'Site key', 'finch-forms' ),
+			__( 'Site key', 'finch-form' ),
 			array( __CLASS__, 'field_text' ),
-			'finch-forms',
-			'finch_forms_turnstile',
+			'finch-form',
+			'finch_form_turnstile',
 			array(
-				'label_for' => 'finch_forms_turnstile_site_key',
+				'label_for' => 'finch_form_turnstile_site_key',
 				'name'      => 'turnstile_site_key',
 				'class'     => 'regular-text',
-				'desc'      => __( 'Public key for the Turnstile widget (client-side).', 'finch-forms' ),
+				'desc'      => __( 'Public key for the Turnstile widget (client-side).', 'finch-form' ),
 			)
 		);
 
 		add_settings_field(
 			'turnstile_secret_key',
-			__( 'Secret key', 'finch-forms' ),
+			__( 'Secret key', 'finch-form' ),
 			array( __CLASS__, 'field_text' ),
-			'finch-forms',
-			'finch_forms_turnstile',
+			'finch-form',
+			'finch_form_turnstile',
 			array(
-				'label_for' => 'finch_forms_turnstile_secret_key',
+				'label_for' => 'finch_form_turnstile_secret_key',
 				'name'      => 'turnstile_secret_key',
 				'class'     => 'regular-text',
 				'type'      => 'password',
-				'desc'      => __( 'Private key for server-side token verification. Keep this secret.', 'finch-forms' ),
+				'desc'      => __( 'Private key for server-side token verification. Keep this secret.', 'finch-form' ),
 			)
 		);
 
 		add_settings_section(
-			'finch_forms_email',
-			__( 'Email', 'finch-forms' ),
+			'finch_form_email',
+			__( 'Email', 'finch-form' ),
 			array( __CLASS__, 'section_email_desc' ),
-			'finch-forms'
+			'finch-form'
 		);
 
 		add_settings_field(
 			'recipient_email',
-			__( 'Recipient email', 'finch-forms' ),
+			__( 'Recipient email', 'finch-form' ),
 			array( __CLASS__, 'field_text' ),
-			'finch-forms',
-			'finch_forms_email',
+			'finch-form',
+			'finch_form_email',
 			array(
-				'label_for' => 'finch_forms_recipient_email',
+				'label_for' => 'finch_form_recipient_email',
 				'name'      => 'recipient_email',
 				'class'     => 'regular-text',
 				'type'      => 'email',
-				'desc'      => __( 'Company email address that will receive form submissions. Sent via Zoho Mail if the Zoho Mail plugin is configured.', 'finch-forms' ),
+				'desc'      => __( 'Company email address that will receive form submissions. You need a Mail plugin configured .'
+				, 'finch-form' ),
 			)
 		);
 
 		add_settings_section(
-			'finch_forms_security',
-			__( 'Security & rate limiting', 'finch-forms' ),
+			'finch_form_security',
+			__( 'Security & rate limiting', 'finch-form' ),
 			array( __CLASS__, 'section_security_desc' ),
-			'finch-forms'
+			'finch-form'
 		);
 
 		add_settings_field(
 			'rate_limit_per_min',
-			__( 'Max submissions per minute (per IP)', 'finch-forms' ),
+			__( 'Max submissions per minute (per IP)', 'finch-form' ),
 			array( __CLASS__, 'field_number' ),
-			'finch-forms',
-			'finch_forms_security',
+			'finch-form',
+			'finch_form_security',
 			array(
-				'label_for' => 'finch_forms_rate_limit_per_min',
+				'label_for' => 'finch_form_rate_limit_per_min',
 				'name'      => 'rate_limit_per_min',
 				'min'       => 1,
 				'max'       => 30,
 				'step'      => 1,
 				'default'   => 3,
-				'desc'      => __( 'Limit how many times one IP can submit the form per minute.', 'finch-forms' ),
+				'desc'      => __( 'Limit how many times one IP can submit the form per minute.', 'finch-form' ),
 			)
 		);
 
 		add_settings_section(
-			'finch_forms_subjects',
-			__( 'Subject options', 'finch-forms' ),
+			'finch_form_subjects',
+			__( 'Subject options', 'finch-form' ),
 			array( __CLASS__, 'section_subjects_desc' ),
-			'finch-forms'
+			'finch-form'
 		);
 
 		add_settings_field(
 			'subjects',
-			__( 'Subject dropdown items', 'finch-forms' ),
+			__( 'Subject dropdown items', 'finch-form' ),
 			array( __CLASS__, 'field_subjects' ),
-			'finch-forms',
-			'finch_forms_subjects'
+			'finch-form',
+			'finch_form_subjects'
 		);
 	}
 
@@ -184,13 +185,13 @@ class Finch_Forms_Settings {
 			$out['rate_limit_per_min'] = max( 1, min( 30, $n ) );
 		}
 
-		// Subject dropdown items: up to 10 sentences, 10–100 characters each.
+		// Subject dropdown items: up to 10 items, 10–70 characters each (same as form subject field).
 		if ( isset( $input['subjects'] ) && is_array( $input['subjects'] ) ) {
 			$subjects = array();
 			foreach ( $input['subjects'] as $subject ) {
 				$subject = trim( wp_strip_all_tags( (string) $subject ) );
 				$len     = strlen( $subject );
-				if ( $len >= 10 && $len <= 100 ) {
+				if ( $len >= 10 && $len <= 70 ) {
 					$subjects[] = $subject;
 				}
 				if ( count( $subjects ) >= 10 ) {
@@ -224,29 +225,29 @@ class Finch_Forms_Settings {
 	 * Section description for Turnstile.
 	 */
 	public static function section_turnstile_desc() {
-		echo '<p>' . esc_html__( 'Configure Cloudflare Turnstile to protect the form from bots. Create a widget at dashboard.cloudflare.com and use the site key and secret key here.', 'finch-forms' ) . '</p>';
-		echo '<p><a href="https://developers.cloudflare.com/turnstile/get-started/" target="_blank" rel="noopener">' . esc_html__( 'Turnstile documentation', 'finch-forms' ) . '</a></p>';
+		echo '<p>' . esc_html__( 'Configure Cloudflare Turnstile to protect the form from bots. Create a widget at dashboard.cloudflare.com and use the site key and secret key here.', 'finch-form' ) . '</p>';
+		echo '<p><a href="https://developers.cloudflare.com/turnstile/get-started/" target="_blank" rel="noopener">' . esc_html__( 'Turnstile documentation', 'finch-form' ) . '</a></p>';
 	}
 
 	/**
 	 * Section description for email.
 	 */
 	public static function section_email_desc() {
-		echo '<p>' . esc_html__( 'Form submissions are sent using WordPress\'s wp_mail(). If you use the Zoho Mail plugin, emails will be sent through your Zoho Mail account.', 'finch-forms' ) . '</p>';
+		echo '<p>' . esc_html__( 'Form submissions are sent using WordPress\'s wp_mail(). You need a mail plugin such as Zoho, WP Mail SMTP, SendGrid.', 'finch-form' ) . '</p>';
 	}
 
 	/**
 	 * Section description for security.
 	 */
 	public static function section_security_desc() {
-		echo '<p>' . esc_html__( 'Rate limiting and security options.', 'finch-forms' ) . '</p>';
+		echo '<p>' . esc_html__( 'Rate limiting and security options.', 'finch-form' ) . '</p>';
 	}
 
 	/**
 	 * Section description for subjects.
 	 */
 	public static function section_subjects_desc() {
-		echo '<p>' . esc_html__( 'Configure up to 10 subject lines (10–100 characters each). When at least one subject is defined, the subject field on the form is shown as a dropdown instead of a free-text input.', 'finch-forms' ) . '</p>';
+		echo '<p>' . esc_html__( 'Configure up to 10 subject lines (10–70 characters each). When at least one subject is defined, the subject field on the form is shown as a dropdown instead of a free-text input.', 'finch-form' ) . '</p>';
 	}
 
 	/**
@@ -259,7 +260,7 @@ class Finch_Forms_Settings {
 		$name   = $args['name'];
 		$value  = isset( $opts[ $name ] ) ? $opts[ $name ] : '';
 		$type   = isset( $args['type'] ) ? $args['type'] : 'text';
-		$id     = isset( $args['label_for'] ) ? $args['label_for'] : 'finch_forms_' . $name;
+		$id     = isset( $args['label_for'] ) ? $args['label_for'] : 'finch_form_' . $name;
 		$class  = isset( $args['class'] ) ? $args['class'] : 'regular-text';
 		$opt_name = self::OPTION_NAME;
 		?>
@@ -284,7 +285,7 @@ class Finch_Forms_Settings {
 		$opts    = self::get_options();
 		$name    = $args['name'];
 		$value   = isset( $opts[ $name ] ) ? $opts[ $name ] : ( isset( $args['default'] ) ? $args['default'] : '' );
-		$id      = isset( $args['label_for'] ) ? $args['label_for'] : 'finch_forms_' . $name;
+		$id      = isset( $args['label_for'] ) ? $args['label_for'] : 'finch_form_' . $name;
 		$min     = isset( $args['min'] ) ? (int) $args['min'] : 0;
 		$max     = isset( $args['max'] ) ? (int) $args['max'] : 999;
 		$step    = isset( $args['step'] ) ? (int) $args['step'] : 1;
@@ -317,23 +318,23 @@ class Finch_Forms_Settings {
 
 		$max = 10;
 
-		echo '<div class="finch-forms-subjects-wrapper" data-max="' . esc_attr( $max ) . '">';
-		echo '<p class="description">' . esc_html__( 'Add preset subject lines. When at least one subject is defined, the subject field on the form is shown as a dropdown instead of a free-text input.', 'finch-forms' ) . '</p>';
+		echo '<div class="finch-form-subjects-wrapper" data-max="' . esc_attr( $max ) . '">';
+		echo '<p class="description">' . esc_html__( 'Add preset subject lines. When at least one subject is defined, the subject field on the form is shown as a dropdown instead of a free-text input.', 'finch-form' ) . '</p>';
 
-		echo '<div class="finch-forms-subjects-input-row">';
-		echo '<input type="text" class="regular-text finch-forms-subject-input" maxlength="100" />';
-		echo ' <button type="button" class="button button-secondary finch-forms-subject-add">' . esc_html__( 'Add', 'finch-forms' ) . '</button>';
+		echo '<div class="finch-form-subjects-input-row">';
+		echo '<input type="text" class="regular-text finch-form-subject-input" maxlength="70" />';
+		echo ' <button type="button" class="button button-secondary finch-form-subject-add">' . esc_html__( 'Add', 'finch-form' ) . '</button>';
 		echo '</div>';
 
-		echo '<p class="description finch-forms-subject-help">' . esc_html__( 'Each subject must be between 10 and 100 characters. Up to 10 subjects can be added.', 'finch-forms' ) . '</p>';
-		echo '<div class="finch-forms-subject-error" style="display:none;"></div>';
+		echo '<p class="description finch-form-subject-help">' . esc_html__( 'Each subject must be between 10 and 70 characters. Up to 10 subjects can be added.', 'finch-form' ) . '</p>';
+		echo '<div class="finch-form-subject-error" style="display:none;"></div>';
 
-		echo '<p class="description"><strong>' . esc_html__( 'List of subject lines that will appear on the form:', 'finch-forms' ) . '</strong></p>';
-		echo '<ul class="finch-forms-subject-list">';
+		echo '<p class="description"><strong>' . esc_html__( 'List of subject lines that will appear on the form:', 'finch-form' ) . '</strong></p>';
+		echo '<ul class="finch-form-subject-list">';
 		foreach ( $subjects as $subject ) {
-			echo '<li class="finch-forms-subject-item">';
-			echo '<span class="finch-forms-subject-text">' . esc_html( $subject ) . '</span> ';
-			echo '<button type="button" class="button-link finch-forms-subject-remove" aria-label="' . esc_attr__( 'Remove subject', 'finch-forms' ) . '">×</button>';
+			echo '<li class="finch-form-subject-item">';
+			echo '<span class="finch-form-subject-text">' . esc_html( $subject ) . '</span> ';
+			echo '<button type="button" class="button-link finch-form-subject-remove" aria-label="' . esc_attr__( 'Remove subject', 'finch-form' ) . '">×</button>';
 			printf(
 				'<input type="hidden" name="%1$s[subjects][]" value="%2$s" />',
 				esc_attr( $opt_name ),
@@ -352,32 +353,34 @@ class Finch_Forms_Settings {
 	 * @param string $hook Current admin page hook.
 	 */
 	public static function enqueue_admin_assets( $hook ) {
-		// The settings screen for add_menu_page with slug 'finch-forms' uses this hook.
-		if ( 'toplevel_page_finch-forms' !== $hook ) {
+		// The settings screen for add_menu_page with slug 'finch-form' uses this hook.
+		if ( 'toplevel_page_finch-form' !== $hook ) {
 			return;
 		}
 
 		wp_enqueue_style(
-			'finch-forms-admin',
-			FINCH_FORMS_PLUGIN_URL . 'assets/css/finch-forms-admin.css',
+			'finch-form-admin',
+			FINCH_FORM_PLUGIN_URL . 'assets/css/finch-form-admin.css',
 			array(),
-			FINCH_FORMS_VERSION
+			FINCH_FORM_VERSION
 		);
 
 		wp_enqueue_script(
-			'finch-forms-admin',
-			FINCH_FORMS_PLUGIN_URL . 'assets/js/finch-forms-admin.js',
+			'finch-form-admin',
+			FINCH_FORM_PLUGIN_URL . 'assets/js/finch-form-admin.js',
 			array( 'jquery' ),
-			FINCH_FORMS_VERSION,
+			FINCH_FORM_VERSION,
 			true
 		);
 
 		wp_localize_script(
-			'finch-forms-admin',
-			'finchFormsAdmin',
+			'finch-form-admin',
+			'finchFormAdmin',
 			array(
 				'maxSubjects'        => 10,
-				'subjectLengthError' => __( 'Each subject must be between 10 and 100 characters.', 'finch-forms' ),
+				'subjectMinLength'   => 10,
+				'subjectMaxLength'   => 70,
+				'subjectLengthError' => __( 'Each subject must be between 10 and 70 characters.', 'finch-form' ),
 			)
 		);
 	}
@@ -390,18 +393,18 @@ class Finch_Forms_Settings {
 			return;
 		}
 		?>
-		<div class="wrap finch-forms-settings">
+		<div class="wrap finch-form-settings">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 			<form action="options.php" method="post">
 				<?php
-				settings_fields( 'finch_forms_options' );
-				do_settings_sections( 'finch-forms' );
-				submit_button( __( 'Save settings', 'finch-forms' ) );
+				settings_fields( 'finch_form_options' );
+				do_settings_sections( 'finch-form' );
+				submit_button( __( 'Save settings', 'finch-form' ) );
 				?>
 			</form>
 			<hr />
-			<h2><?php esc_html_e( 'Shortcode', 'finch-forms' ); ?></h2>
-			<p><?php esc_html_e( 'Add the contact form to any page or post (including WPBakery) using this shortcode:', 'finch-forms' ); ?></p>
+			<h2><?php esc_html_e( 'Shortcode', 'finch-form' ); ?></h2>
+			<p><?php esc_html_e( 'Add the contact form to any page or post (including WPBakery) using this shortcode:', 'finch-form' ); ?></p>
 			<code>[finch_contact_form]</code>
 		</div>
 		<?php
@@ -414,8 +417,8 @@ class Finch_Forms_Settings {
 	 * @return array
 	 */
 	public static function settings_link( $links ) {
-		$url = admin_url( 'admin.php?page=finch-forms' );
-		$links[] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'finch-forms' ) . '</a>';
+		$url = admin_url( 'admin.php?page=finch-form' );
+		$links[] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Settings', 'finch-form' ) . '</a>';
 		return $links;
 	}
 }

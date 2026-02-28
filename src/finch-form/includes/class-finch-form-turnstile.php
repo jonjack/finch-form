@@ -2,16 +2,16 @@
 /**
  * Cloudflare Turnstile server-side token verification via SiteVerify API.
  *
- * @package Finch_Forms
+ * @package Finch_Form
  * @see https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class Finch_Forms_Turnstile
+ * Class Finch_Form_Turnstile
  */
-class Finch_Forms_Turnstile {
+class Finch_Form_Turnstile {
 
 	const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
