@@ -46,6 +46,7 @@ final class Finch_Form {
 		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-settings.php';
 		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-logger.php';
 		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-turnstile.php';
+		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-email-template.php';
 		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-handler.php';
 		require_once FINCH_FORM_PLUGIN_DIR . 'includes/class-finch-form-shortcode.php';
 	}

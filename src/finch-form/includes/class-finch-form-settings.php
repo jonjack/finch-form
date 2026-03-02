@@ -220,6 +220,9 @@ class Finch_Form_Settings {
 				}
 			}
 			$out['subjects'] = $subjects;
+		} else {
+			// No subjects submitted (e.g. user removed the last one — zero hidden inputs); save empty list.
+			$out['subjects'] = array();
 		}
 
 		$out['logging_enabled'] = ! empty( $input['logging_enabled'] );

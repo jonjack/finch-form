@@ -115,10 +115,10 @@ class Finch_Form_Handler {
 		}
 
 		// 5. Turnstile (only after request looks like a valid submission)
-		$opts = FINCH_FORM_Settings::get_options();
+		$opts = Finch_Form_Settings::get_options();
 		if ( ! empty( $opts['turnstile_secret_key'] ) ) {
 			$token = isset( $_POST['cf-turnstile-response'] ) ? sanitize_text_field( wp_unslash( $_POST['cf-turnstile-response'] ) ) : '';
-			$result = FINCH_FORM_Turnstile::verify( $token, $opts['turnstile_secret_key'], $ip );
+			$result = Finch_Form_Turnstile::verify( $token, $opts['turnstile_secret_key'], $ip );
 			if ( ! $result['success'] ) {
 				$out['message'] = __( 'Verification failed. Please complete the challenge and try again.', 'finch-form' );
 				wp_send_json( $out );
@@ -134,26 +134,50 @@ class Finch_Form_Handler {
 		}
 
 		// Safe email: do not spoof From. Use site default From and put customer in Reply-To.
-		$site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
-		$subject_line = sprintf(
-			/* translators: 1: site name, 2: subject line from form */
-			__( '[%1$s] Contact: %2$s', 'finch-form' ),
-			$site_name,
-			$subject ? $subject : __( '(No subject)', 'finch-form' )
-		);
-		$headers = array(
-			'Content-Type: text/plain; charset=UTF-8',
-			'Reply-To: ' . $email,
-		);
-		$body = sprintf(
-			"Name: %s\nEmail: %s\nSubject: %s\n\nMessage:\n%s",
-			$name,
-			$email,
-			$subject,
-			$message
-		);
+		$site_name   = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
+		$subject_txt = $subject ? $subject : __( '(No subject)', 'finch-form' );
+		$subject_line = sprintf( '%1$s: %2$s', $site_name, $subject_txt );
 
-		$sent = wp_mail( $recipient, $subject_line, $body, $headers );
+		// Pick a safe From address on YOUR domain (should be allowed by Zoho)
+		$from_email = ! empty( $opts['from_email'] ) ? $opts['from_email'] : 'no-reply@camoray.com';
+		$from_email = sanitize_email( $from_email );
+
+		try {
+			// Build the email template (HTML + text + headers)
+			$template = Finch_Form_Email_Template::build( array(
+				'title'      => $subject_line,
+				'intro'      => __( 'A new message was submitted via the website contact form.', 'finch-form' ),
+				'brand_color'=> '#111111',
+			
+				// NEW: set From explicitly
+				'from_name'  => $site_name,
+				'from_email' => $from_email,
+			
+				// keep Reply-To as the user
+				'reply_to'   => $email,
+			
+				'fields'     => array(
+					array( 'label' => __( 'Name', 'finch-form' ),  'value' => $name ),
+					array( 'label' => __( 'Email', 'finch-form' ), 'value' => $email ),
+					array(
+						'type'  => 'block',
+						'label' => __( 'Message', 'finch-form' ),
+						'value' => $message,
+					),
+				),
+			) );
+
+			// Buffer output so any plugin (e.g. Zoho Mail) that echoes during wp_mail() doesn't corrupt our JSON response.
+			ob_start();
+			$sent = wp_mail( $recipient, $subject_line, $template['html'], $template['headers'] );
+			ob_end_clean();
+		} catch ( \Exception $e ) {
+			if ( class_exists( 'Finch_Form_Logger' ) ) {
+				Finch_Form_Logger::log( 'Email template or wp_mail exception: ' . $e->getMessage(), array( 'trace' => $e->getTraceAsString() ), false );
+			}
+			$out['message'] = __( 'Sorry, we could not send your message at the moment. Please try again later.', 'finch-form' );
+			wp_send_json( $out );
+		}
 
 		if ( $sent ) {
 			self::record_rate_limit( $ip );
@@ -195,7 +219,7 @@ class Finch_Form_Handler {
 	 * @return bool True if allowed.
 	 */
 	private static function check_rate_limit( $ip ) {
-		$opts = FINCH_FORM_Settings::get_options();
+		$opts = Finch_Form_Settings::get_options();
 		$max  = isset( $opts['rate_limit_per_min'] ) ? (int) $opts['rate_limit_per_min'] : 3;
 		$key  = self::RATE_LIMIT_TRANSIENT_PREFIX . md5( $ip );
 		$count = (int) get_transient( $key );
@@ -208,7 +232,7 @@ class Finch_Form_Handler {
 	 * @param string $ip Client IP.
 	 */
 	private static function record_rate_limit( $ip ) {
-		$opts = FINCH_FORM_Settings::get_options();
+		$opts = Finch_Form_Settings::get_options();
 		$max  = isset( $opts['rate_limit_per_min'] ) ? (int) $opts['rate_limit_per_min'] : 3;
 		$key  = self::RATE_LIMIT_TRANSIENT_PREFIX . md5( $ip );
 		$count = (int) get_transient( $key );

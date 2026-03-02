@@ -72,10 +72,6 @@
 			formData.append('action', action);
 			if (nonce) formData.append('finch-form_nonce', nonce);
 
-			if (debug) {
-				console.log("formData: " + formData);
-			}
-
 			setSubmitting(true);
 
 			$.ajax({
@@ -119,7 +115,17 @@
 						resetTurnstile();
 					}
 				})
-				.fail(function () {
+				.fail(function (jqXHR, textStatus, errorThrown) {
+					// .fail() runs for non-2xx status, invalid JSON, or network errors. Log to find root cause.
+					if (debug) {
+						console.error('Form AJAX fail:', {
+							status: jqXHR.status,
+							statusText: jqXHR.statusText,
+							responseText: (jqXHR.responseText || '').substring(0, 500),
+							textStatus: textStatus,
+							errorThrown: errorThrown
+						});
+					}
 					showFeedback(
 						'<div class="finch-form-feedback-content">Network error. Please try again.</div>',
 						true

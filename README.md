@@ -4,15 +4,17 @@
 
 A secure WordPress contact form plugin with **Cloudflare Turnstile** support, **rate limiting** and **CSRF protection**.
 
-- Integrates with all standard email plugins such as Zoho, WP Mail SMTP, SendGrid. 
-- Client side and server side validation.
+- Integrates with all standard email plugins such as Fluent SMTP, WP Mail SMTP, SendGrid. 
+- Data sanitization and validation.
 - Configurable mail Subject list.
+- Supprts Reply-To header.
+- HTML email body.
 
 ## Requirements
 
 - WordPress 5.0+
 - PHP 7.4+
-- A plugin to handle SMTP such as Zoho, WP Mail SMTP, SendGrid.
+- A plugin to handle SMTP such as Fluent SMTP, WP Mail SMTP, SendGrid.
 - A [Cloudflare account](https://dash.cloudflare.com/sign-up) and [Turnstile](https://developers.cloudflare.com/turnstile/) widget. Note that this is all [Free](https://www.cloudflare.com/en-gb/application-services/products/turnstile/#turnstile-pricing) unless you are a large enterprise.
 
 
@@ -49,7 +51,9 @@ A secure WordPress contact form plugin with **Cloudflare Turnstile** support, **
 
 ## Handling Email/SMTP
 
-Finch Form uses WordPress’s generic `wp_mail()` interface. So, as long as you have another plugin installed (and configured) which handles SMTP (such as Zoho Mail, WP Mail SMTP, SendGrid etc) no extra configuration is needed in Finch Form beyond setting the **Recipient email** in the Finch Form settings page.
+Finch Form uses WordPress’s generic `wp_mail()` interface. So, as long as you have another plugin installed (and configured) which handles SMTP (such as Fluent SMTP, WP Mail SMTP, SendGrid etc) no extra configuration is needed in Finch Form beyond setting the **Recipient email** in the Finch Form settings page.
+
+Note that since Finch Form sets the Reply-To header it is not compatible with any SMTP plugins that do not support setting this, such as the Zoho mail plugin. If you are using Zoho mail then we recommend using FluentSMTP plugin and configuring it with your Zoho SMTP settings. 
 
 ## Project structure
 
