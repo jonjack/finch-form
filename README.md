@@ -79,3 +79,12 @@ npm run build
 - Shortcode & WPBakery: `includes/class-finch-form-shortcode.php`
 - Front-end: `assets/js/finch-form.js`, `assets/css/finch-form.css`
 
+## Screenshots
+
+Validation errors.
+
+![](docs/finch-form-validation.jpg)
+
+Sent message.
+
+![](docs/finch-form-sent.jpg)
