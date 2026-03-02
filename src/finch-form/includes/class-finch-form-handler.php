@@ -21,9 +21,8 @@ class Finch_Form_Handler {
 	const NAME_MIN = 2;
 	const NAME_MAX = 50;
 
-	/** Email field length limits. */
-	const EMAIL_MIN = 10;
-	const EMAIL_MAX = 50;
+	/** Email field: max length for browser input only (no server-side length validation). */
+	const EMAIL_MAX = 254;
 
 	/** Subject field length limits (form and admin subject dropdown items). */
 	const SUBJECT_MIN = 10;
@@ -31,7 +30,7 @@ class Finch_Form_Handler {
 
 	/** Message field length limits. */
 	const MESSAGE_MIN = 20;
-	const MESSAGE_MAX = 2000;
+	const MESSAGE_MAX = 1000;
 
 	/**
 	 * Initialize AJAX handlers.
@@ -45,6 +44,12 @@ class Finch_Form_Handler {
 	 * Handle AJAX form submission.
 	 */
 	public static function handle_submit() {
+
+		// DEBUG ↓↓↓
+		Finch_Form_Logger::log( "\n\nSTART OF NEW FORM REQUEST ↓↓↓\n" );
+		Finch_Form_Logger::log( 'POST payload', $_POST, true );
+		// DEBUG ↑↑↑
+		
 		$out = array( 'success' => false, 'message' => '' );
 
 		// 1. Nonce (CSRF)
@@ -76,30 +81,34 @@ class Finch_Form_Handler {
 
 		$errors = array();
 		if ( strlen( $name ) < self::NAME_MIN || strlen( $name ) > self::NAME_MAX ) {
-			$errors[] = __( 'Name cannot be empty', 'finch-form' );
+			$errors[] = __( 'Please enter a Name.', 'finch-form' );
 		}
 		if ( ! is_email( $email ) ) {
-			$errors[] = __( 'Please enter a valid email address.', 'finch-form' );
+			$errors[] = __( 'Please enter a valid Email address.', 'finch-form' );
 		}
-		if ( strlen( $email ) < self::EMAIL_MIN || strlen( $email ) > self::EMAIL_MAX ) {
-			$errors[] = __( 'Email must be between 10 and 50 characters.', 'finch-form' );
-		}
-		if ( strlen( $subject ) > self::SUBJECT_MAX ) {
-			$errors[] = __( 'Subject is too long.', 'finch-form' );
-		}
-		if ( $subject !== '' && strlen( $subject ) < self::SUBJECT_MIN ) {
-			$errors[] = __( 'Subject must be at least 10 characters.', 'finch-form' );
+		if ( strlen( $subject ) < self::SUBJECT_MIN || strlen( $subject ) > self::SUBJECT_MAX ) {
+			$errors[] = sprintf(
+				/* translators: 1: min length, 2: max length */
+				__( 'Please enter a Subject.', 'finch-form' ),
+				self::SUBJECT_MIN,
+				self::SUBJECT_MAX
+			);
 		}
 		if ( strlen( $message ) < self::MESSAGE_MIN || strlen( $message ) > self::MESSAGE_MAX ) {
 			$errors[] = sprintf(
 				/* translators: 1: min length, 2: max length */
-				__( 'Message must be between %1$d and %2$d characters.', 'finch-form' ),
+				__( 'Please enter a Message between %1$d and %2$d characters in length', 'finch-form' ),
 				self::MESSAGE_MIN,
 				self::MESSAGE_MAX
 			);
 		}
 
 		if ( ! empty( $errors ) ) {
+
+			// DEBUG ↓↓↓
+			Finch_Form_Logger::log( "Validation errors:", $errors, true );
+			// DEBUG ↑↑↑
+
 			$out['message'] = implode( ' ', $errors );
 			$out['errors']  = $errors;
 			wp_send_json( $out );
@@ -151,7 +160,7 @@ class Finch_Form_Handler {
 			$out['success'] = true;
 			$out['message'] = __( 'Your message has been sent 🚀. We aim to respond within 24 hours.', 'finch-form' );
 		} else {
-			$out['message'] = __( 'Sorry, we could not send your message. Please try again later.', 'finch-form' );
+			$out['message'] = __( 'Sorry, we could not send your message at the moment. Please try again later.', 'finch-form' );
 		}
 
 		wp_send_json( $out );

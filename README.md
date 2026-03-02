@@ -24,9 +24,9 @@ A secure WordPress contact form plugin with **Cloudflare Turnstile** support, **
    npm run build
    ```
 
-   This creates a zip file in `dist/`, for example `dist/finch-form-1.0.5.zip`.
+   This creates a zip file in `dist/`, for example `dist/finch-form-1.0.0.zip`.
 
-2. In WordPress: **Plugins → Add New → Upload Plugin**, choose the generated zip from `dist/` (for example `dist/finch-form-1.0.5.zip`), then **Install Now** and **Activate**.
+2. In WordPress: **Plugins → Add New → Upload Plugin**, choose the generated zip from `dist/` (for example `dist/finch-form-1.0.0.zip`), then **Install Now** and **Activate**.
 
 3. Go to the **Finch Form** menu in the WordPress admin sidebar and configure:
 
@@ -54,7 +54,7 @@ Finch Form uses WordPress’s generic `wp_mail()` interface. So, as long as you 
 ## Project structure
 
 - **`src/finch-form/`** – Plugin source (this is what gets zipped).
-- **`dist/`** – Build output; contains versioned plugin zips such as `finch-form-1.0.5.zip`.
+- **`dist/`** – Build output; contains versioned plugin zips such as `finch-form-1.0.0.zip`.
 - **`scripts/build.sh`** – Build script that zips `src/finch-form` → `dist/finch-form-x.y.z.zip`.
 
 ## Build
@@ -69,6 +69,7 @@ npm run build
 
 - Main plugin file: `src/finch-form/finch-form.php`
 - Settings: `includes/class-finch-form-settings.php`
+- Logging: `includes/class-finch-form-logger.php`
 - Turnstile verification: `includes/class-finch-form-turnstile.php`
 - Form handler (AJAX, validation, email): `includes/class-finch-form-form-handler.php`
 - Shortcode & WPBakery: `includes/class-finch-form-shortcode.php`

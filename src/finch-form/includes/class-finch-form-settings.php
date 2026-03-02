@@ -112,8 +112,7 @@ class Finch_Form_Settings {
 				'name'      => 'recipient_email',
 				'class'     => 'regular-text',
 				'type'      => 'email',
-				'desc'      => __( 'Company email address that will receive form submissions. You need a Mail plugin configured .'
-				, 'finch-form' ),
+				'desc'      => __( 'Company email address that will receive form submissions. You need a Mail plugin configured.', 'finch-form' ),
 			)
 		);
 
@@ -154,6 +153,28 @@ class Finch_Form_Settings {
 			array( __CLASS__, 'field_subjects' ),
 			'finch-form',
 			'finch_form_subjects'
+		);
+
+		add_settings_section(
+			'finch_form_diagnostics',
+			__( 'Diagnostics', 'finch-form' ),
+			function () {
+				echo '<p>' . esc_html__( 'Logging helps diagnose form issues. Only enable when needed.', 'finch-form' ) . '</p>';
+			},
+			'finch-form'
+		);
+		
+		add_settings_field(
+			'logging_enabled',
+			__( 'Enable plugin logging', 'finch-form' ),
+			array( __CLASS__, 'field_checkbox' ),
+			'finch-form',
+			'finch_form_diagnostics',
+			array(
+				'label_for' => 'finch_form_logging_enabled',
+				'name'      => 'logging_enabled',
+				'desc'      => __( 'Write diagnostic logs to wp-content/uploads/finch-form-plugin/finch-form.log', 'finch-form' ),
+			)
 		);
 	}
 
@@ -201,6 +222,8 @@ class Finch_Form_Settings {
 			$out['subjects'] = $subjects;
 		}
 
+		$out['logging_enabled'] = ! empty( $input['logging_enabled'] );
+
 		return $out;
 	}
 
@@ -216,6 +239,7 @@ class Finch_Form_Settings {
 			'recipient_email'      => get_option( 'admin_email', '' ),
 			'rate_limit_per_min'   => 3,
 			'subjects'             => array(),
+			'logging_enabled'      => false,
 		);
 		$opts = get_option( self::OPTION_NAME, array() );
 		return wp_parse_args( $opts, $defaults );
@@ -345,6 +369,32 @@ class Finch_Form_Settings {
 		echo '</ul>';
 
 		echo '</div>';
+	}
+
+	/**
+	 * Render a checkbox field.
+	 *
+	 * @param array $args Field args (name, label_for, desc).
+	 */
+	public static function field_checkbox( $args ) {
+		$opts     = self::get_options();
+		$name     = $args['name'];
+		$checked  = ! empty( $opts[ $name ] );
+		$id       = isset( $args['label_for'] ) ? $args['label_for'] : 'finch_form_' . $name;
+		$opt_name = self::OPTION_NAME;
+		?>
+		<label for="<?php echo esc_attr( $id ); ?>">
+			<input type="checkbox"
+				id="<?php echo esc_attr( $id ); ?>"
+				name="<?php echo esc_attr( $opt_name ); ?>[<?php echo esc_attr( $name ); ?>]"
+				value="1"
+				<?php checked( $checked ); ?>
+			/>
+			<?php if ( ! empty( $args['desc'] ) ) : ?>
+				<span class="description"><?php echo esc_html( $args['desc'] ); ?></span>
+			<?php endif; ?>
+		</label>
+		<?php
 	}
 
 	/**

@@ -69,16 +69,6 @@ class Finch_Form_Shortcode {
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'action'  => Finch_Form_Handler::AJAX_ACTION,
 			'nonce'   => wp_create_nonce( Finch_Form_Handler::NONCE_ACTION ),
-			'limits'  => array(
-				'nameMin'    => Finch_Form_Handler::NAME_MIN,
-				'nameMax'    => Finch_Form_Handler::NAME_MAX,
-				'emailMin'   => Finch_Form_Handler::EMAIL_MIN,
-				'emailMax'   => Finch_Form_Handler::EMAIL_MAX,
-				'subjectMin' => Finch_Form_Handler::SUBJECT_MIN,
-				'subjectMax' => Finch_Form_Handler::SUBJECT_MAX,
-				'messageMin' => Finch_Form_Handler::MESSAGE_MIN,
-				'messageMax' => Finch_Form_Handler::MESSAGE_MAX,
-			),
 		) );
 	}
 
@@ -125,16 +115,16 @@ class Finch_Form_Shortcode {
 
 				<div class="finch-form-field">
 					<label for="finch_name"><?php esc_html_e( 'Name', 'finch-form' ); ?> <span class="required">*</span></label>
-					<input type="text" name="finch_name" id="finch_name" required minlength="<?php echo esc_attr( (string) Finch_Form_Handler::NAME_MIN ); ?>" maxlength="<?php echo esc_attr( (string) Finch_Form_Handler::NAME_MAX ); ?>" value="" />
+					<input type="text" name="finch_name" id="finch_name" maxlength="<?php echo esc_attr( (string) Finch_Form_Handler::NAME_MAX ); ?>" value="" />
 				</div>
 
 				<div class="finch-form-field">
 					<label for="finch_email"><?php esc_html_e( 'Email', 'finch-form' ); ?> <span class="required">*</span></label>
-					<input type="email" name="finch_email" id="finch_email" required minlength="<?php echo esc_attr( (string) Finch_Form_Handler::EMAIL_MIN ); ?>" maxlength="<?php echo esc_attr( (string) Finch_Form_Handler::EMAIL_MAX ); ?>" value="" />
+					<input type="email" name="finch_email" id="finch_email" maxlength="<?php echo esc_attr( (string) Finch_Form_Handler::EMAIL_MAX ); ?>" value="" />
 				</div>
 
 				<div class="finch-form-field">
-					<label for="finch_subject"><?php esc_html_e( 'Subject', 'finch-form' ); ?></label>
+					<label for="finch_subject"><?php esc_html_e( 'Subject', 'finch-form' ); ?> <span class="required">*</span></label>
 					<?php if ( ! empty( $subjects ) ) : ?>
 						<select name="finch_subject" id="finch_subject" class="finch-form-select">
 							<option value=""><?php esc_html_e( 'Please select…', 'finch-form' ); ?></option>
@@ -143,13 +133,13 @@ class Finch_Form_Shortcode {
 							<?php endforeach; ?>
 						</select>
 					<?php else : ?>
-						<input type="text" name="finch_subject" id="finch_subject" minlength="<?php echo esc_attr( (string) Finch_Form_Handler::SUBJECT_MIN ); ?>" maxlength="<?php echo esc_attr( (string) Finch_Form_Handler::SUBJECT_MAX ); ?>" value="" />
+						<input type="text" name="finch_subject" id="finch_subject" maxlength="<?php echo esc_attr( (string) Finch_Form_Handler::SUBJECT_MAX ); ?>" value="" />
 					<?php endif; ?>
 				</div>
 
 				<div class="finch-form-field">
 					<label for="finch_message"><?php esc_html_e( 'Message', 'finch-form' ); ?> <span class="required">*</span></label>
-					<textarea name="finch_message" id="finch_message" required minlength="<?php echo esc_attr( (string) Finch_Form_Handler::MESSAGE_MIN ); ?>" maxlength="<?php echo esc_attr( (string) Finch_Form_Handler::MESSAGE_MAX ); ?>" rows="5"></textarea>
+					<textarea name="finch_message" id="finch_message" maxlength="<?php echo esc_attr( (string) Finch_Form_Handler::MESSAGE_MAX ); ?>" rows="5"></textarea>
 				</div>
 
 				<?php if ( $site_key ) : ?>
@@ -177,7 +167,7 @@ class Finch_Form_Shortcode {
 		vc_map( array(
 			'name'        => __( 'Finch Contact Form', 'finch-form' ),
 			'base'       => self::SHORTCODE,
-			'icon'       => 'dashicons-email-alt',
+			'icon'       => 'dashicons-twitter',
 			'category'   => __( 'Content', 'finch-form' ),
 			'description' => __( 'Secure contact form with Turnstile and AJAX submission.', 'finch-form' ),
 			'params'     => array(),

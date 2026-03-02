@@ -49,6 +49,10 @@ class Finch_Form_Turnstile {
 			$body['remoteip'] = $remote_ip;
 		}
 
+		// DEBUG ↓↓↓
+		Finch_Form_Logger::log( "Calling Cloudflare to verify token:", $token, true );
+		// DEBUG ↑↑↑
+
 		$response = wp_remote_post(
 			self::SITEVERIFY_URL,
 			array(
@@ -59,6 +63,10 @@ class Finch_Form_Turnstile {
 				),
 			)
 		);
+
+		// DEBUG ↓↓↓
+		Finch_Form_Logger::log( "Cloudflare response:", $response, true );
+		// DEBUG ↑↑↑
 
 		if ( is_wp_error( $response ) ) {
 			return $default;

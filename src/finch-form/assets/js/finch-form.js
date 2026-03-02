@@ -4,6 +4,9 @@
 (function ($) {
 	'use strict';
 
+	// Enable debugging - writes to console.log
+	var debug = true; 
+
 	function init() {
 		var $form = $('#finch-form-form');
 		if (!$form.length) return;
@@ -14,45 +17,12 @@
 		var ajaxUrl = (window.finchForm && window.finchForm.ajaxUrl) || '';
 		var action = (window.finchForm && window.finchForm.action) || 'finch-form_submit';
 		var nonce = (window.finchForm && window.finchForm.nonce) || '';
-		var limits = (window.finchForm && window.finchForm.limits) || {};
 
-		function validateEmail(email) {
-			var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			return typeof email === 'string' && re.test(email);
+		// DEBUG ↓↓↓
+		if (debug) {
+			console.log("init() → window.finchForm: " + JSON.stringify(window.finchForm, null, 2));
 		}
-
-		function validateForm() {
-			var errors = [];
-			var name = $.trim($form.find('#finch_name').val() || '');
-			var email = $.trim($form.find('#finch_email').val() || '');
-			var subject = $.trim($form.find('#finch_subject').val() || '');
-			var message = $.trim($form.find('#finch_message').val() || '');
-
-			if (limits.nameMin != null && limits.nameMax != null) {
-				if (name.length < limits.nameMin || name.length > limits.nameMax) {
-					errors.push('Name cannot be empty.');
-				}
-			}
-			if (limits.emailMin != null && limits.emailMax != null) {
-				if (!validateEmail(email)) {
-					errors.push('Please enter a valid email address.');
-				} else if (email.length < limits.emailMin || email.length > limits.emailMax) {
-					errors.push('Email must be between ' + limits.emailMin + ' and ' + limits.emailMax + ' characters.');
-				}
-			}
-			if (limits.subjectMin != null && limits.subjectMax != null && subject !== '') {
-				if (subject.length < limits.subjectMin || subject.length > limits.subjectMax) {
-					errors.push('Subject must be between ' + limits.subjectMin + ' and ' + limits.subjectMax + ' characters.');
-				}
-			}
-			if (limits.messageMin != null && limits.messageMax != null) {
-				if (message.length < limits.messageMin || message.length > limits.messageMax) {
-					errors.push('Message must be between ' + limits.messageMin + ' and ' + limits.messageMax + ' characters.');
-				}
-			}
-
-			return errors;
-		}
+		// DEBUG ↑↑↑
 
 		function showFeedback(content, isError) {
 			$feedbackBlock
@@ -75,10 +45,21 @@
 		}
 
 		function resetTurnstile() {
-			if (typeof turnstile !== 'undefined' && typeof turnstile.reset === 'function') {
-				var el = $wrapper.find('.cf-turnstile')[0];
-				if (el && el.id) turnstile.reset(el.id);
+			if (typeof turnstile === 'undefined' || typeof turnstile.reset !== 'function') return;
+
+			// Clear the response field so the next submit never sends the previous (one-time) token.
+			// form.reset() does not clear Turnstile's injected field, so the old token would still be sent.
+			$form.find('[name="cf-turnstile-response"]').val('');
+
+			var el = $wrapper.find('.cf-turnstile')[0];
+			if (el && el.id) {
+				turnstile.reset(el.id);
+			} else {
+				// Implicit rendering may not set an id on the container; reset all widgets.
+				turnstile.reset();
 			}
+
+			if (debug) console.log('Turnstile reset');
 		}
 
 		$form.on('submit', function (e) {
@@ -87,20 +68,13 @@
 
 			hideFeedback();
 
-			var clientErrors = validateForm();
-			if (clientErrors.length > 0) {
-				var list = '<div class="finch-form-feedback-list">';
-				for (var i = 0; i < clientErrors.length; i++) {
-					list += '<div class="finch-form-feedback-item">' + $('<div>').text(clientErrors[i]).html() + '</div>';
-				}
-				list += '</div>';
-				showFeedback(list, true);
-				return;
-			}
-
 			var formData = new FormData($form[0]);
 			formData.append('action', action);
 			if (nonce) formData.append('finch-form_nonce', nonce);
+
+			if (debug) {
+				console.log("formData: " + formData);
+			}
 
 			setSubmitting(true);
 
@@ -113,6 +87,14 @@
 				dataType: 'json'
 			})
 				.done(function (data) {
+
+					// DEBUG ↓↓↓ 
+					if (debug) {
+						console.log("form.on('submit').done() → data");
+						console.log(JSON.stringify(data, null, 2));
+					} 
+					// DEBUG ↑↑↑
+
 					if (data && data.success) {
 						var successMsg = (data.message || 'Thank you. Your message has been sent.');
 						showFeedback(
@@ -120,6 +102,7 @@
 							false
 						);
 						$form[0].reset();
+						// Reset Turnstile after form reset so the next submit gets a new token (and clear response so we never resend the old one).
 						resetTurnstile();
 					} else {
 						var msg = (data && data.message) || 'Something went wrong. Please try again.';
