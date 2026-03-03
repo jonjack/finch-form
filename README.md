@@ -2,13 +2,16 @@
 
 # Finch Form
 
-A secure WordPress contact form plugin with **Cloudflare Turnstile** support, **rate limiting** and **CSRF protection**.
+A simple secure WordPress contact form plugin with **Cloudflare Turnstile** support, **rate limiting** and **CSRF protection**.
 
 - Integrates with all standard email plugins such as Fluent SMTP, WP Mail SMTP, SendGrid. 
 - Data sanitization and validation.
 - Configurable mail Subject list.
 - Supprts Reply-To header.
 - HTML email body.
+
+> [!NOTE]
+> This is a simple opinionated contact form with a fixed set of fields and validation messages. It is not highly configurable at this time so may not fit your use case, but its free!
 
 ## Requirements
 
@@ -26,9 +29,9 @@ A secure WordPress contact form plugin with **Cloudflare Turnstile** support, **
    npm run build
    ```
 
-   This creates a zip file in `dist/`, for example `dist/finch-form-1.0.0.zip`.
+   This creates a zip file in `dist/`, for example `dist/finch-form-1.0.1.zip`.
 
-2. In WordPress: **Plugins → Add New → Upload Plugin**, choose the generated zip from `dist/` (for example `dist/finch-form-1.0.0.zip`), then **Install Now** and **Activate**.
+2. In WordPress: **Plugins → Add New → Upload Plugin**, choose the generated zip from `dist/` (for example `dist/finch-form-1.0.1.zip`), then **Install Now** and **Activate**.
 
 3. Go to the **Finch Form** menu in the WordPress admin sidebar and configure:
 
@@ -58,7 +61,7 @@ Note that since Finch Form sets the Reply-To header it is not compatible with an
 ## Project structure
 
 - **`src/finch-form/`** – Plugin source (this is what gets zipped).
-- **`dist/`** – Build output; contains versioned plugin zips such as `finch-form-1.0.0.zip`.
+- **`dist/`** – Build output; contains versioned plugin zips such as `finch-form-1.0.1.zip`.
 - **`scripts/build.sh`** – Build script that zips `src/finch-form` → `dist/finch-form-x.y.z.zip`.
 
 ## Build
