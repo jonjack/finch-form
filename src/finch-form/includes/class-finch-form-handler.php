@@ -138,8 +138,8 @@ class Finch_Form_Handler {
 		$subject_txt = $subject ? $subject : __( '(No subject)', 'finch-form' );
 		$subject_line = sprintf( '%1$s: %2$s', $site_name, $subject_txt );
 
-		// Pick a safe From address on YOUR domain (should be allowed by Zoho)
-		$from_email = ! empty( $opts['from_email'] ) ? $opts['from_email'] : 'no-reply@camoray.com';
+		// Default From: use setting or derive from site (e.g. wordpress@yourdomain.com).
+		$from_email = ! empty( $opts['from_email'] ) ? $opts['from_email'] : self::default_from_email();
 		$from_email = sanitize_email( $from_email );
 
 		try {
@@ -188,6 +188,17 @@ class Finch_Form_Handler {
 		}
 
 		wp_send_json( $out );
+	}
+
+	/**
+	 * Default From address when not set in options (wordpress@site-domain).
+	 *
+	 * @return string
+	 */
+	private static function default_from_email() {
+		$domain = wp_parse_url( home_url(), PHP_URL_HOST );
+		$domain = $domain ? preg_replace( '/^www\./', '', $domain ) : 'example.com';
+		return 'wordpress@' . $domain;
 	}
 
 	/**

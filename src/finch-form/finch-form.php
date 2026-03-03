@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/jonjack/finch-form
  * Description: Secure contact form with Cloudflare Turnstile, rate limiting, and all Email integration plugins (Zoho, WP Mail SMTP, SendGrid, etc.).
  * Version: 1.0.1
- * Author: Jon Jackson
+ * Author: jonjack
  * Text Domain: finch-form
  */
 

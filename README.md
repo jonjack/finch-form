@@ -75,16 +75,10 @@ npm run build
 - Settings: `includes/class-finch-form-settings.php`
 - Logging: `includes/class-finch-form-logger.php`
 - Turnstile verification: `includes/class-finch-form-turnstile.php`
-- Form handler (AJAX, validation, email): `includes/class-finch-form-form-handler.php`
+- Form handler (AJAX, validation, email): `includes/class-finch-form-handler.php`
 - Shortcode & WPBakery: `includes/class-finch-form-shortcode.php`
 - Front-end: `assets/js/finch-form.js`, `assets/css/finch-form.css`
 
 ## Screenshots
 
-Validation errors.
-
-![](docs/finch-form-validation.jpg)
-
-Sent message.
-
-![](docs/finch-form-sent.jpg)
+![](docs/screenshots.jpg)
